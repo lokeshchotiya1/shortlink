@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\ShortLink;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $shortLinks = ShortLink::latest()->get();
+
+     return view('home', compact('shortLinks'));
 });
 
 Route::get('generate-shorten-link', 'HomeController@index');
