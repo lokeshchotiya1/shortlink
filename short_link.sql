@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 27, 2021 at 02:29 PM
+-- Generation Time: Aug 28, 2021 at 04:05 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.2.22
 
@@ -44,7 +44,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2016_06_01_000003_create_oauth_refresh_tokens_table', 1),
 (16, '2016_06_01_000004_create_oauth_clients_table', 1),
 (17, '2016_06_01_000005_create_oauth_personal_access_clients_table', 1),
-(18, '2021_08_27_114951_create_short_links_table', 1);
+(18, '2021_08_27_114951_create_short_links_table', 1),
+(19, '2021_08_28_013535_create_url_redirect_history_table', 2);
 
 -- --------------------------------------------------------
 
@@ -144,7 +145,30 @@ CREATE TABLE `short_links` (
 --
 
 INSERT INTO `short_links` (`id`, `code`, `link`, `created_at`, `updated_at`) VALUES
-(1, 'dxKWBy', 'https://twitter.com/lockandstockxyz/status/1245492089338638339', '2021-08-27 06:58:42', '2021-08-27 06:58:42');
+(2, 'LxZA0o', 'https://google.com/?utm=source', '2021-08-27 20:33:15', '2021-08-27 20:33:15'),
+(3, '2uAv1W', 'https://www.linkedin.com/signup', '2021-08-27 20:34:52', '2021-08-27 20:34:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `url_redirect_history`
+--
+
+CREATE TABLE `url_redirect_history` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `ip_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `url_redirect_history`
+--
+
+INSERT INTO `url_redirect_history` (`id`, `ip_address`, `url_id`, `created_at`, `updated_at`) VALUES
+(6, '::1', 2, '2021-08-27 20:33:36', '2021-08-27 20:33:36'),
+(7, '::1', 3, '2021-08-27 20:34:57', '2021-08-27 20:34:57');
 
 --
 -- Indexes for dumped tables
@@ -197,6 +221,13 @@ ALTER TABLE `short_links`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `url_redirect_history`
+--
+ALTER TABLE `url_redirect_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `url_redirect_history_url_id_foreign` (`url_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -204,7 +235,7 @@ ALTER TABLE `short_links`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -222,7 +253,23 @@ ALTER TABLE `oauth_personal_access_clients`
 -- AUTO_INCREMENT for table `short_links`
 --
 ALTER TABLE `short_links`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `url_redirect_history`
+--
+ALTER TABLE `url_redirect_history`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `url_redirect_history`
+--
+ALTER TABLE `url_redirect_history`
+  ADD CONSTRAINT `url_redirect_history_url_id_foreign` FOREIGN KEY (`url_id`) REFERENCES `short_links` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

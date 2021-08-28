@@ -14,7 +14,13 @@ use App\ShortLink;
 */
 
 Route::get('/', function () {
-    $shortLinks = ShortLink::latest()->get();
+    
+     $shortLinks = ShortLink::select("short_links.*",
+
+             DB::raw("(select count(id) from url_redirect_history where url_id = short_links.id ) as url_open_count"))
+
+             ->groupby("short_links.id")
+             ->get();
 
      return view('home', compact('shortLinks'));
 });
@@ -23,3 +29,4 @@ Route::get('generate-shorten-link', 'HomeController@index');
 Route::post('generate-shorten-link', 'HomeController@store')->name('generate.shorten.link.post');
 
 Route::get('{code}', 'HomeController@shortenLink')->name('shorten.link');
+Route::post('save-user-redirect', 'HomeController@save_user_redirect');
